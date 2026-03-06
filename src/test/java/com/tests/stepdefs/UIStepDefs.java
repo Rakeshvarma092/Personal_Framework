@@ -32,7 +32,7 @@ public class UIStepDefs extends LoginPage {
 
     @Given("user navigates to the application URL")
     public void userNavigatesToTheApplicationURL() {
-        driver.get(ConfigReader.getProperty("ui.url"));
+        driver.get(ConfigReader.getProperty("SWITCH.URL"));
     }
 
     @Then("Verify {string} page is visible")
