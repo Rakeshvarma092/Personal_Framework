@@ -39,4 +39,5 @@ public class UIStepDefs extends LoginPage {
     public void verifyPageIsVisible(String arg0) {
         AssertionUtils.assertTrue(isLoginTitleDisplayed(), arg0 + " page is not visible");
     }
+
 }

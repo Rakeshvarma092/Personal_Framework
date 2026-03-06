@@ -43,9 +43,10 @@ public class ApiClient {
                 .response();
     }
 
-    public static Response post(String endpoint, Object body) {
+    public static Response post(String baseUri, String endpoint, Object body) {
         return RestAssured.given()
                 .spec(requestSpec)
+                .baseUri(baseUri)
                 .body(body)
                 .when()
                 .post(endpoint)
