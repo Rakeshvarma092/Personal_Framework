@@ -16,7 +16,7 @@ public class SwitchDestinationPage {
 
     private static final String SELECT_DROPDOWN = "//span[normalize-space()='%s']";
 
-    @FindBy(xpath = "//button[icon[contains(@class,'settings')]] | //button[contains(.,'Configuration')]")
+    @FindBy(xpath = "//body//app-root//button[4]")
     private WebElement nav_SwitchConfiguration;
 
     @FindBy(xpath = "//li[contains(normalize-space(),'Switch Destination')]")

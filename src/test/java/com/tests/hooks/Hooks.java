@@ -42,15 +42,7 @@ public class Hooks {
 
     @AfterStep("@ui or @Browser")
     public void afterStepActions(Scenario scenario) {
-        boolean screenshotEveryStep = Boolean.parseBoolean(ConfigReader.getProperty("screenshot.every.step"));
-        
-        if (scenario.isFailed()) {
-            captureScreenshot(scenario, "Failed_Step_" + stepCounter.getAndIncrement());
-        } else if (screenshotEveryStep) {
-            captureScreenshot(scenario, "Step_" + stepCounter.getAndIncrement());
-        } else {
-            stepCounter.incrementAndGet();
-        }
+        // Step-level screenshots disabled as per requirement to capture only the last step.
     }
 
     @After("@ui or @Browser")
@@ -58,14 +50,14 @@ public class Hooks {
         try {
             WebDriver driver = DriverManager.getDriver();
             if (driver != null) {
-                // Attach final screenshot if scenario passed (optional context)
-                if (!scenario.isFailed()) {
-                    captureScreenshot(scenario, "Completed_Scenario_Success");
-                }
+                // Capture screenshot for the last executed step (Pass/Fail)
+                String prefix = scenario.isFailed() ? "Final_State_Failed" : "Final_State_Success";
+                captureScreenshot(scenario, prefix);
+                
                 logger.info("Finished Scenario: {} - Result: {}", scenario.getName(), scenario.getStatus());
             }
         } catch (Exception e) {
-            logger.warn("Error during teardown screenshot capture: {}", e.getMessage());
+            logger.warn("Error during final screenshot capture: {}", e.getMessage());
         } finally {
             DriverManager.quitDriver();
             logger.info("WebDriver session closed.");

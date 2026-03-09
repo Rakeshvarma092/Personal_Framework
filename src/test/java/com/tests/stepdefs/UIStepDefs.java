@@ -115,11 +115,11 @@ public class UIStepDefs {
         List<Map<String, String>> data = dataTable.asMaps(String.class, String.class);
         Map<String, String> row = data.get(0);
         switchPage.enterTransactionDetails(
-                row.get("Type"),
-                row.get("Channel"),
+                row.get("Transaction Type"),
+                row.get("Transaction Channel"),
                 row.get("Processing Code"),
                 row.get("MTI"),
-                row.get("Expiry")
+                row.get("Transaction Expiry")
         );
     }
 
