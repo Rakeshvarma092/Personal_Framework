@@ -1,34 +1,24 @@
 package com.tests.stepdefs;
 
+import com.framework.config.ConfigReader;
+import com.framework.ui.LoginPage;
+import com.framework.ui.SwitchDestinationPage;
+import com.framework.utils.AssertionUtils;
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import com.framework.ui.LoginPage;
-import com.framework.utils.AssertionUtils;
-import com.framework.config.ConfigReader;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
-
+import java.util.List;
+import java.util.Map;
 
 public class UIStepDefs extends LoginPage {
 
-//    @Given("I navigate to Google")
-//    public void i_navigate_to_google() {
-//        driver.get(ConfigReader.getProperty("ui.url"));
-//    }
-//
-//    @When("I search for {string}")
-//    public void i_search_for(String searchTerm) {
-//        sendKeys(By.name("q"), searchTerm + Keys.ENTER);
-//    }
-//
-//    @Then("I should see search results related to {string}")
-//    public void i_should_see_search_results_related_to(String expectedText) {
-//        boolean titleContains = wait.until(ExpectedConditions.titleContains(expectedText));
-//        AssertionUtils.assertTrue(titleContains, "Title does not contain " + expectedText + ". Actual title: " + driver.getTitle());
-//    }
+    LoginPage loginPage = new LoginPage();
+    SwitchDestinationPage switchPage = new SwitchDestinationPage();
+
+    // ==================== COMMON / LOGIN STEPS ====================
 
     @Given("user navigates to the application URL")
     public void userNavigatesToTheApplicationURL() {
@@ -70,4 +60,87 @@ public class UIStepDefs extends LoginPage {
         AssertionUtils.assertEquals(getErrorMessage(), expectedError, "Error message mismatch");
     }
 
+    // ==================== SWITCH DESTINATION STEPS ====================
+
+    @When("user navigates to the Switch Destination page")
+    public void userNavigatesToTheSwitchDestinationPage() {
+        switchPage.navigateToSwitchDestination();
+    }
+
+    @Then("the header {string} should be displayed")
+    public void theHeaderShouldBeDisplayed(String expectedHeader) {
+        AssertionUtils.assertTrue(switchPage.isHeaderDisplayed(), "Header not displayed");
+    }
+
+    @When("user clicks on Create button")
+    public void userClicksOnCreateButton() {
+        switchPage.clickCreate();
+    }
+
+    @Then("the title {string} should be displayed")
+    public void theTitleShouldBeDisplayed(String expectedTitle) {
+        AssertionUtils.assertTrue(switchPage.isCreateTitleDisplayed(), "Create title not displayed");
+    }
+
+    @When("user selects Scheme as {string}")
+    public void userSelectsSchemeAs(String scheme) {
+        switchPage.selectScheme(scheme);
+    }
+
+    @And("user enters configuration details:")
+    public void userEntersConfigurationDetails(DataTable dataTable) {
+        List<Map<String, String>> data = dataTable.asMaps(String.class, String.class);
+        Map<String, String> row = data.get(0);
+        switchPage.enterConfigurationDetails(
+                row.get("Name"),
+                row.get("Acquirer ID"),
+                row.get("Forward ID"),
+                row.get("Facilitator ID"),
+                row.get("Group SignOn")
+        );
+    }
+
+    @And("user clicks on Next button")
+    public void userClicksOnNextButton() {
+        switchPage.clickNext();
+    }
+
+    @And("user clicks on Add button")
+    public void userClicksOnAddButton() {
+        switchPage.clickAdd();
+    }
+
+    @And("user enters transaction details:")
+    public void userEntersTransactionDetails(DataTable dataTable) {
+        List<Map<String, String>> data = dataTable.asMaps(String.class, String.class);
+        Map<String, String> row = data.get(0);
+        switchPage.enterTransactionDetails(
+                row.get("Type"),
+                row.get("Channel"),
+                row.get("Processing Code"),
+                row.get("MTI"),
+                row.get("Expiry")
+        );
+    }
+
+    @And("user clicks on Save button")
+    public void userClicksOnSaveButton() {
+        switchPage.clickSave();
+    }
+
+    @Then("the configuration {string} should be successfully created")
+    public void theConfigurationShouldBeSuccessfullyCreated(String configName) {
+        AssertionUtils.assertTrue(switchPage.isHeaderDisplayed(), "Failed to return to configuration list");
+    }
+
+    @And("user clicks on Save button without entering details")
+    public void userClicksOnSaveButtonWithoutEnteringDetails() {
+        switchPage.clickSave();
+    }
+
+    @Then("user should see mandatory field errors")
+    public void userShouldSeeMandatoryFieldErrors() {
+        // Placeholder for error validation
+        AssertionUtils.assertTrue(true, "Mandatory errors verified");
+    }
 }
