@@ -32,7 +32,7 @@ public class APIStepDefs {
                 .requestObject(LoginRequest.RequestObject.builder()
                         .identifier("admin@default")
                         .password("Password@123")
-                        .applicationUrl("https://admin-dev.swt.toucanint.com")
+                        .applicationUrl(ConfigReader.getProperty("api.base.url"))
                         .build())
                 .build();
     }
@@ -45,10 +45,11 @@ public class APIStepDefs {
                 .requestObject(LoginRequest.RequestObject.builder()
                         .identifier(identifier)
                         .password(password)
-                        .applicationUrl("https://admin-dev.swt.toucanint.com")
+                        .applicationUrl(ConfigReader.getProperty("api.base.url"))
                         .build())
                 .build();
     }
+
     @When("I send a POST request to Login API")
     public void i_send_a_post_request_to_login_api() {
         String loginUrl = ConfigReader.getProperty("login.api.url");
@@ -61,21 +62,28 @@ public class APIStepDefs {
 
     @Then("the response success flag should be true")
     public void the_response_success_flag_should_be_true() {
-        AssertionUtils.assertTrue(response.jsonPath().getBoolean("success"), "Success flag is false");
+        Boolean success = response.jsonPath().get("success");
+        AssertionUtils.assertTrue(success != null && success, "Success flag is either missing or false in response: " + response.asString());
     }
 
     @Then("the response success flag should be false")
     public void the_response_success_flag_should_be_false() {
-        AssertionUtils.assertTrue(!response.jsonPath().getBoolean("success"), "Success flag is true but expected false");
+        Boolean success = response.jsonPath().get("success");
+        AssertionUtils.assertTrue(success != null && !success, "Success flag is either missing or true but expected false in response: " + response.asString());
     }
+
     @Then("the access token should not be null")
     public void the_access_token_should_not_be_null() {
         AssertionUtils.assertNotNull(loginResponse.getAccess_token(), "Access token is null");
     }
+
     @Then("I should receive a {int} status code")
-    public void iShouldReceiveAStatusCode(int arg0) {
+    public void iShouldReceiveAStatusCode(int expectedStatusCode) {
+        AssertionUtils.assertEquals(response.getStatusCode(), expectedStatusCode, "Status code mismatch");
     }
+
     //==================================== Update Scheme Destination Steps ====================================//
+
     @Given("I have a valid update scheme destination payload")
     public void iHaveAValidUpdateSchemeDestinationPayload() {
         List<UpdateSchemeRequest.SchemeMessageType> messages = new ArrayList<>();
