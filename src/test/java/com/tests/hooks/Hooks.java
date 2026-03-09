@@ -1,43 +1,80 @@
 package com.tests.hooks;
 
-import io.cucumber.java.After;
-import io.cucumber.java.AfterStep;
-import io.cucumber.java.Before;
-import io.cucumber.java.Scenario;
+import driver.DriverManager;
+import io.cucumber.java.*;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import driver.DriverManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+/**
+ * Cucumber Hooks for setup and teardown activities.
+ * Handles WebDriver lifecycle and screenshot capture for UI scenarios.
+ * Tags: @ui or @Browser trigger these hooks.
+ */
 public class Hooks {
 
+    private static final Logger logger = LoggerFactory.getLogger(Hooks.class);
+
     @Before("@ui or @Browser")
-    public void setupUI() {
-        // Initialize driver
-        DriverManager.getDriver();
+    public void setupUI(Scenario scenario) {
+        logger.info("Starting Scenario: {}", scenario.getName());
+        try {
+            // Initialize driver via DriverManager
+            DriverManager.getDriver();
+            logger.info("WebDriver initialized successfully for scenario: {}", scenario.getName());
+        } catch (Exception e) {
+            logger.error("Failed to initialize WebDriver for scenario: {}", scenario.getName(), e);
+            throw e;
+        }
+    }
+
+    @BeforeStep("@ui or @Browser")
+    public void beforeStep(Scenario scenario) {
+        // Optional: Can add step-level logging or pre-step checks
     }
 
     @AfterStep("@ui or @Browser")
-    public void captureScreenshotOnFailure(Scenario scenario) {
+    public void afterStepActions(Scenario scenario) {
         if (scenario.isFailed()) {
-            WebDriver driver = DriverManager.getDriver();
-            if (driver != null) {
-                final byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-                scenario.attach(screenshot, "image/png", "Failed_Step_Screenshot_" + scenario.getName().replace(" ", "_"));
-            }
+            captureScreenshot(scenario, "Failed_Step_Screenshot");
         }
     }
 
     @After("@ui or @Browser")
     public void tearDownUI(Scenario scenario) {
-        WebDriver driver = DriverManager.getDriver();
-        if (driver != null) {
-            // Capture final screenshot on completion (optional, can be commented out if too noisy)
-            if (!scenario.isFailed()) {
-                final byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-                scenario.attach(screenshot, "image/png", "Completed_Scenario_" + scenario.getName().replace(" ", "_"));
+        try {
+            WebDriver driver = DriverManager.getDriver();
+            if (driver != null) {
+                // Attach final screenshot if scenario passed (optional context)
+                if (!scenario.isFailed()) {
+                    captureScreenshot(scenario, "Completed_Scenario_Success");
+                }
+                logger.info("Finished Scenario: {} - Result: {}", scenario.getName(), scenario.getStatus());
             }
+        } catch (Exception e) {
+            logger.warn("Error during teardown screenshot capture: {}", e.getMessage());
+        } finally {
+            DriverManager.quitDriver();
+            logger.info("WebDriver session closed.");
         }
-        DriverManager.quitDriver();
+    }
+
+    /**
+     * Helper method to capture and attach screenshots to Cucumber scenario.
+     */
+    private void captureScreenshot(Scenario scenario, String prefix) {
+        try {
+            WebDriver driver = DriverManager.getDriver();
+            if (driver instanceof TakesScreenshot) {
+                String screenshotName = prefix + "_" + scenario.getName().replaceAll("[^a-zA-Z0-9]", "_");
+                final byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+                scenario.attach(screenshot, "image/png", screenshotName);
+                logger.debug("Screenshot attached: {}", screenshotName);
+            }
+        } catch (Exception e) {
+            logger.error("Failed to capture screenshot: {}", e.getMessage());
+        }
     }
 }
