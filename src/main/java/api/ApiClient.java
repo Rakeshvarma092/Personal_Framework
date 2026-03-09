@@ -44,10 +44,15 @@ public class ApiClient {
     }
 
     public static Response post(String baseUri, String endpoint, Object body) {
-        return RestAssured.given()
-                .spec(requestSpec)
-                .baseUri(baseUri)
-                .body(body)
+        return post(baseUri, endpoint, body, null);
+    }
+
+    public static Response post(String baseUri, String endpoint, Object body, String token) {
+        RequestSpecification request = RestAssured.given().spec(requestSpec).baseUri(baseUri);
+        if (token != null && !token.isEmpty()) {
+            request.header("Authorization", "Bearer " + token);
+        }
+        return request.body(body)
                 .when()
                 .post(endpoint)
                 .then()
