@@ -130,10 +130,12 @@ public class SwitchDestinationPage {
 
     public void enterTransactionDetails(String type, String channel, String procCode, String mti, String expiry) {
         wait.until(ExpectedConditions.elementToBeClickable(select_TransactionType)).click();
-        driver.findElement(By.xpath(String.format(SELECT_DROPDOWN, type))).click();
+        WebElement typeOption = driver.findElement(By.xpath(String.format(SELECT_DROPDOWN, type)));
+        wait.until(ExpectedConditions.elementToBeClickable(typeOption)).click();
         
         wait.until(ExpectedConditions.elementToBeClickable(select_TransactionChannel)).click();
-        driver.findElement(By.xpath(String.format(SELECT_DROPDOWN, channel))).click();
+        WebElement channelOption = driver.findElement(By.xpath(String.format(SELECT_DROPDOWN, channel)));
+        wait.until(ExpectedConditions.elementToBeClickable(channelOption)).click();
         
         txt_ProcessingCode.sendKeys(procCode);
         txt_MTI.sendKeys(mti);
