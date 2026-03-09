@@ -7,6 +7,9 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import config.ConfigReader;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Cucumber Hooks for setup and teardown activities.
@@ -16,9 +19,11 @@ import org.slf4j.LoggerFactory;
 public class Hooks {
 
     private static final Logger logger = LoggerFactory.getLogger(Hooks.class);
+    private final AtomicInteger stepCounter = new AtomicInteger(1);
 
     @Before("@ui or @Browser")
     public void setupUI(Scenario scenario) {
+        stepCounter.set(1); // Reset counter for each scenario
         logger.info("Starting Scenario: {}", scenario.getName());
         try {
             // Initialize driver via DriverManager
@@ -37,8 +42,14 @@ public class Hooks {
 
     @AfterStep("@ui or @Browser")
     public void afterStepActions(Scenario scenario) {
+        boolean screenshotEveryStep = Boolean.parseBoolean(ConfigReader.getProperty("screenshot.every.step"));
+        
         if (scenario.isFailed()) {
-            captureScreenshot(scenario, "Failed_Step_Screenshot");
+            captureScreenshot(scenario, "Failed_Step_" + stepCounter.getAndIncrement());
+        } else if (screenshotEveryStep) {
+            captureScreenshot(scenario, "Step_" + stepCounter.getAndIncrement());
+        } else {
+            stepCounter.incrementAndGet();
         }
     }
 
@@ -68,7 +79,10 @@ public class Hooks {
         try {
             WebDriver driver = DriverManager.getDriver();
             if (driver instanceof TakesScreenshot) {
-                String screenshotName = prefix + "_" + scenario.getName().replaceAll("[^a-zA-Z0-9]", "_");
+                String timestamp = String.valueOf(System.currentTimeMillis());
+                String sanitizedScenarioName = scenario.getName().replaceAll("[^a-zA-Z0-9]", "_");
+                String screenshotName = prefix + "_" + sanitizedScenarioName + "_" + timestamp;
+                
                 final byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
                 scenario.attach(screenshot, "image/png", screenshotName);
                 logger.debug("Screenshot attached: {}", screenshotName);
