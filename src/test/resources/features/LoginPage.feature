@@ -1,4 +1,3 @@
-@ui
 Feature: Login Functionality
 
   # ==================== LOGIN PAGE VERIFICATION ====================
