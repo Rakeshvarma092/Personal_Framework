@@ -40,4 +40,34 @@ public class UIStepDefs extends LoginPage {
         AssertionUtils.assertTrue(isLoginTitleDisplayed(), arg0 + " page is not visible");
     }
 
+    @When("user enters Email ID as {string}")
+    public void userEntersEmailIDAs(String email) {
+        enterEmailID(email);
+    }
+
+    @When("user enters Password as {string}")
+    public void userEntersPasswordAs(String password) {
+        enterPassword(password);
+    }
+
+    @When("user clicks on Login button")
+    public void userClicksOnLoginButton() {
+        clickLoginButton();
+    }
+
+    @Then("user should be navigated to the dashboard")
+    public void userShouldBeNavigatedToTheDashboard() {
+        AssertionUtils.assertTrue(isHeaderDisplayed(), "User is not navigated to the dashboard");
+    }
+
+    @Then("user should see the header name as {string}")
+    public void userShouldSeeTheHeaderNameAs(String expectedHeader) {
+        AssertionUtils.assertEquals(getHeaderText(), expectedHeader, "Header name mismatch");
+    }
+
+    @Then("user should see an error message {string}")
+    public void userShouldSeeAnErrorMessage(String expectedError) {
+        AssertionUtils.assertEquals(getErrorMessage(), expectedError, "Error message mismatch");
+    }
+
 }
