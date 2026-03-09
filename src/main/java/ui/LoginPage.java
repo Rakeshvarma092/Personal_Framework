@@ -1,4 +1,4 @@
-package com.framework.ui;
+package ui;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -6,7 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import com.framework.driver.DriverManager;
+import driver.DriverManager;
+import config.ConfigReader;
 
 import java.time.Duration;
 
@@ -31,6 +32,10 @@ public class LoginPage {
         this.driver = DriverManager.getDriver();
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         org.openqa.selenium.support.PageFactory.initElements(driver, this);
+    }
+
+    public void navigateToApplicationURL() {
+        driver.get(ConfigReader.getProperty("SWITCH.URL"));
     }
 
     protected void sendKeys(By locator, String text) {

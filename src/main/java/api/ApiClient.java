@@ -1,4 +1,4 @@
-package com.framework.api;
+package api;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -9,7 +9,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
-import com.framework.config.ConfigReader;
+import config.ConfigReader;
 
 import java.util.Map;
 

@@ -1,17 +1,14 @@
 package com.tests.stepdefs;
 
-import com.framework.api.models.LoginRequest;
-import com.framework.api.models.LoginResponse;
-import com.framework.config.ConfigReader;
+import api.models.LoginRequest;
+import api.models.LoginResponse;
+import config.ConfigReader;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
-import com.framework.api.ApiClient;
-import com.framework.utils.AssertionUtils;
-
-import java.util.HashMap;
-import java.util.Map;
+import api.ApiClient;
+import utils.AssertionUtils;
 
 public class APIStepDefs {
     private LoginRequest loginRequest;

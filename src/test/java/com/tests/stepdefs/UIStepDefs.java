@@ -1,9 +1,9 @@
 package com.tests.stepdefs;
 
-import com.framework.config.ConfigReader;
-import com.framework.ui.LoginPage;
-import com.framework.ui.SwitchDestinationPage;
-import com.framework.utils.AssertionUtils;
+import config.ConfigReader;
+import ui.LoginPage;
+import ui.SwitchDestinationPage;
+import utils.AssertionUtils;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -13,7 +13,7 @@ import io.cucumber.java.en.When;
 import java.util.List;
 import java.util.Map;
 
-public class UIStepDefs extends LoginPage {
+public class UIStepDefs {
 
     LoginPage loginPage = new LoginPage();
     SwitchDestinationPage switchPage = new SwitchDestinationPage();
@@ -22,42 +22,42 @@ public class UIStepDefs extends LoginPage {
 
     @Given("user navigates to the application URL")
     public void userNavigatesToTheApplicationURL() {
-        driver.get(ConfigReader.getProperty("SWITCH.URL"));
+        loginPage.navigateToApplicationURL();
     }
 
     @Then("Verify {string} page is visible")
     public void verifyPageIsVisible(String arg0) {
-        AssertionUtils.assertTrue(isLoginTitleDisplayed(), arg0 + " page is not visible");
+        AssertionUtils.assertTrue(loginPage.isLoginTitleDisplayed(), arg0 + " page is not visible");
     }
 
     @When("user enters Email ID as {string}")
     public void userEntersEmailIDAs(String email) {
-        enterEmailID(email);
+        loginPage.enterEmailID(email);
     }
 
     @When("user enters Password as {string}")
     public void userEntersPasswordAs(String password) {
-        enterPassword(password);
+        loginPage.enterPassword(password);
     }
 
     @When("user clicks on Login button")
     public void userClicksOnLoginButton() {
-        clickLoginButton();
+        loginPage.clickLoginButton();
     }
 
     @Then("user should be navigated to the dashboard")
     public void userShouldBeNavigatedToTheDashboard() {
-        AssertionUtils.assertTrue(isHeaderDisplayed(), "User is not navigated to the dashboard");
+        AssertionUtils.assertTrue(loginPage.isHeaderDisplayed(), "User is not navigated to the dashboard");
     }
 
     @Then("user should see the header name as {string}")
     public void userShouldSeeTheHeaderNameAs(String expectedHeader) {
-        AssertionUtils.assertEquals(getHeaderText(), expectedHeader, "Header name mismatch");
+        AssertionUtils.assertEquals(loginPage.getHeaderText(), expectedHeader, "Header name mismatch");
     }
 
     @Then("user should see an error message {string}")
     public void userShouldSeeAnErrorMessage(String expectedError) {
-        AssertionUtils.assertEquals(getErrorMessage(), expectedError, "Error message mismatch");
+        AssertionUtils.assertEquals(loginPage.getErrorMessage(), expectedError, "Error message mismatch");
     }
 
     // ==================== SWITCH DESTINATION STEPS ====================
