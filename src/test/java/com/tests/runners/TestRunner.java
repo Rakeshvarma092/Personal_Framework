@@ -12,7 +12,7 @@ import org.testng.annotations.DataProvider;
                 "html:target/cucumber-reports.html",
                 "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"
         },
-        tags = "@Branch3"
+        tags = "@Branch4"
 )
 public class TestRunner extends AbstractTestNGCucumberTests {
 
