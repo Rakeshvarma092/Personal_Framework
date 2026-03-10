@@ -1,0 +1,95 @@
+{
+    "requestObject": {
+        "id": "6870f514b889d3727c6cd6c1",
+        "switchDestination": "RUPAY",
+        "name": "RUPAY",
+        "acquirerId": "034605",
+        "forwardingId": "014620",
+        "paymentFacilitatorId": "123456",
+        "groupSignOn": "60855",
+        "pinEncrytionKey": null,
+        "transportKEK": null,
+        "transportKEKIndex": null,
+        "isSignOnAllowed": null,
+        "isEchoAllowed": true,
+        "isKeyXAllowed": null,
+        "schemeMessageType": [
+            {
+                "txnAllow": "ONLINE",
+                "isSingle": false,
+                "isDccAllowed": null,
+                "authMessageTypeEnum": "AUTH",
+                "mti": "0100",
+                "processingCode": "00",
+                "txnSource": "PG",
+                "isTxnAllowed": true,
+                "txnExpiry": 15
+            },
+            {
+                "txnAllow": "ONLINE",
+                "isSingle": false,
+                "isDccAllowed": null,
+                "authMessageTypeEnum": "SAVE_CARD",
+                "mti": "0100",
+                "processingCode": "00",
+                "txnSource": "PG",
+                "isTxnAllowed": true,
+                "txnExpiry": 15
+            },
+            {
+                "txnAllow": "ONLINE",
+                "isSingle": false,
+                "isDccAllowed": null,
+                "authMessageTypeEnum": "AUTH_SAVE_CARD",
+                "mti": "0100",
+                "processingCode": "00",
+                "txnSource": "PG",
+                "isTxnAllowed": true,
+                "txnExpiry": 15
+            },
+            {
+                "txnAllow": "ONLINE",
+                "isSingle": false,
+                "isDccAllowed": null,
+                "authMessageTypeEnum": "REVERSAL",
+                "mti": "0400",
+                "processingCode": "00",
+                "txnSource": "PG",
+                "isTxnAllowed": true,
+                "txnExpiry": 15
+            },
+            {
+                "txnAllow": "ONLINE",
+                "isSingle": false,
+                "isDccAllowed": null,
+                "authMessageTypeEnum": "AUTO_PAY",
+                "mti": "0100",
+                "processingCode": "00",
+                "txnSource": "PG",
+                "isTxnAllowed": true,
+                "txnExpiry": 15
+            },
+            {
+                "txnAllow": "ONLINE",
+                "isSingle": false,
+                "isDccAllowed": null,
+                "authMessageTypeEnum": "PREAUTH",
+                "mti": "0100",
+                "processingCode": "00",
+                "txnSource": "PG",
+                "isTxnAllowed": true,
+                "txnExpiry": 15
+            }
+        ],
+        "networkControls": {
+            "participantId": "608552",
+            "acqBin": "652154",
+            "currency": "INR",
+            "processingId": "12345678901",
+            "fileCategory": "Test",
+            "acquirerReferanceData": "12345678",
+            "originatingMessageFormat": "RECEIVED_MESSAGE_IN_THE_IPM_FORMAT",
+            "acquirerDestinationId": "123333"
+        }
+    }
+}
